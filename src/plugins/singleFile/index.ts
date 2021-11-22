@@ -13,12 +13,12 @@ for (const handler of handlers) {
   )
 }
 
-export function handleSingleFile(fileName: string) {
+export async function handleSingleFile(fileName: string) {
   const names = fileName.split('.')
   if (names.length === 2) {
     const handler = handlerMap.get(names[1])
     if (handler) {
-      handler.handle({
+      await handler.handle({
         name: names[0],
         fullName: fileName,
         path: config.stDir + fileName

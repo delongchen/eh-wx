@@ -1,7 +1,7 @@
 import watch  from 'node-watch'
 import {config} from "../config";
 import {handleOnePkg, nowHandle} from "./ehPkg";
-import {removePkg} from "./store";
+import {dirtyPkgMap, removePkg} from "./store";
 import { basename } from 'path'
 
 let fileWatcher = null
@@ -26,14 +26,17 @@ function startWatch() {
     fileWatcher.on('change', (evt, name) => {
       const ends = basename(String(name))
       if (evt === 'remove' && ends) {
-        const toRemoveId = +ends
-        if (toRemoveId !== Number.NaN) {
-          removePkg(toRemoveId)
+        if (dirtyPkgMap.has(ends)) {
+          dirtyPkgMap.delete(ends)
+        } else {
+          const id = +ends
+          if (id !== Number.NaN) {
+            removePkg(id)
+          }
         }
       }
 
       if (evt === 'update' && ends) {
-        console.log('up')
         handleOnePkg(ends)
       }
     })

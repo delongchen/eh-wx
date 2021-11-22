@@ -99,6 +99,6 @@ export async function handleOnePkg(dirName: string) {
     await handleDir(dirName)
   }
   else if (fileStat.isFile()) {
-    handleSingleFile(dirName)
+    await handleSingleFile(dirName)
   }
 }
